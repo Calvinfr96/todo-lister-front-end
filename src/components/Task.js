@@ -1,9 +1,11 @@
 import React from 'react'
 
-function Task() {
+function Task({task}) {
     return (
         <div>
-            
+            <li>
+                {task.description}
+            </li>
         </div>
     )
 }
