@@ -14,9 +14,9 @@ function TaskContainer() {
     const taskComponents = tasks.map(task => <Task key={task.id} task={task} />)
 
     return (
-        <div>
+        <ul className="TaskContainer">
            {taskComponents} 
-        </div>
+        </ul>
     )
 }
 
