@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import NewCategoryForm from './NewCategoryForm'
 import NewTaskForm from './NewTaskForm'
 import Task from './Task'
 
@@ -6,6 +7,8 @@ function TaskContainer() {
     const [tasks, setTasks] = useState([])
     const [categories, setCategories] = useState([])
     const baseURL = "http://localhost:9393"
+    const options = categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)
+    
 
     useEffect(() => {
         fetch(`${baseURL}/tasks`)
@@ -44,11 +47,36 @@ function TaskContainer() {
             })
     }
 
+    function addCategory(name) {
+        const configObj = {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                name: name
+            })
+        }
+        fetch(`${baseURL}/categories`, configObj)
+            .then(resp => resp.json())
+            .then(newCategory => {
+                setCategories([...categories, newCategory])
+            })   
+    }
+
+    function deleteCategory(id) {
+        fetch(`${baseURL}/categories/${id}`, {method:"DELETE"})
+            .then(resp => resp.json())
+            .then(data => {
+                const updatedCategories = categories.filter(category => category.id !== parseInt(id))
+                setCategories(updatedCategories)
+            })
+    }
+
     const taskComponents = tasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} />)
 
     return (
         <div>
-            <NewTaskForm categories={categories} addTask={addTask} />
+            <NewTaskForm options={options} addTask={addTask} />
+            <NewCategoryForm options={options} addCategory={addCategory} deleteCategory={deleteCategory} />
             <ul className="TaskContainer">
             {taskComponents} 
             </ul>

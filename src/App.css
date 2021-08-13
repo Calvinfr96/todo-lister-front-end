@@ -16,3 +16,7 @@ h1 {
   text-align: left;
   border: 1px solid black;
 }
+
+.CategoryForm form {
+  display: inline;
+}

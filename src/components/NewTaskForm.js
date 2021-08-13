@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-function NewTaskForm({categories, addTask}) {
+function NewTaskForm({options, addTask}) {
     const [formData, setFormData] = useState({
         description: "",
         category_id: "none"
@@ -25,7 +25,7 @@ function NewTaskForm({categories, addTask}) {
         })
     }
 
-    const options = categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)
+    
 
     return (
         <form onSubmit={handleSubmit}>
