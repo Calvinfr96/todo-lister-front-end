@@ -21,7 +21,6 @@ function NewCategoryForm({options, addCategory, deleteCategory}) {
 
     function handleDeleteCategory(event) {
         event.preventDefault()
-        console.log(selection)
         deleteCategory(selection)
         setSelection("none")
     }

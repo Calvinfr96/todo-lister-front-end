@@ -2,18 +2,19 @@ import React, {useState, useEffect} from 'react'
 import NewCategoryForm from './NewCategoryForm'
 import NewTaskForm from './NewTaskForm'
 import Task from './Task'
+import TaskFilter from './TaskFilter'
 
-function TaskContainer() {
-    const [tasks, setTasks] = useState([])
+function TaskContainer({setUsers, users, currentUser}) {
+    const [allTasks, setAllTasks] = useState([])
     const [categories, setCategories] = useState([])
+    const [categoryFilter, setCategoryFilter] = useState("All")
     const baseURL = "http://localhost:9393"
     const options = categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)
-    
 
     useEffect(() => {
         fetch(`${baseURL}/tasks`)
             .then(resp => resp.json())
-            .then(data => setTasks(data))
+            .then(data => setAllTasks(data))
     },[])
 
     useEffect(() => {
@@ -22,19 +23,26 @@ function TaskContainer() {
             .then(data => setCategories(data))
     }, [])
 
+    useEffect(() => {
+        fetch(`${baseURL}/users`)
+            .then(resp => resp.json())
+            .then(data => setUsers(data))
+    }, [setUsers, allTasks])
+
     function addTask(formData) {
         const configObj = {
             method: "POST",
             headers: {"Content-Type":"application/json"},
             body: JSON.stringify({
                 ...formData,
-                category_id: parseInt(formData.category_id)
+                category_id: parseInt(formData.category_id),
+                user_id: parseInt(currentUser)
             })
         }
         fetch(`${baseURL}/tasks`, configObj)
             .then(resp => resp.json())
             .then(newTask => {
-                setTasks([...tasks, newTask])
+                setAllTasks([...allTasks, newTask])
             })
     }
 
@@ -42,8 +50,8 @@ function TaskContainer() {
         fetch(`${baseURL}/tasks/${id}`, {method:"DELETE"})
             .then(resp => resp.json())
             .then(data => {
-                const updatedTasks = tasks.filter(task => task.id !== id)
-                setTasks(updatedTasks)
+                const updatedTasks = allTasks.filter(task => task.id !== id)
+                setAllTasks(updatedTasks)
             })
     }
 
@@ -71,15 +79,22 @@ function TaskContainer() {
             })
     }
 
-    const taskComponents = tasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} />)
+    const userTasks = allTasks.filter(task => task.user_id === parseInt(currentUser))
+    const filteredTasks = userTasks.filter(task => categoryFilter ===  "All" || task.category_id === parseInt(categoryFilter))
+    const taskComponents = filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} />)
 
     return (
         <div>
             <NewTaskForm options={options} addTask={addTask} />
             <NewCategoryForm options={options} addCategory={addCategory} deleteCategory={deleteCategory} />
-            <ul className="TaskContainer">
-            {taskComponents} 
-            </ul>
+            {currentUser === "none" ? 
+            (<p>Please select your username to view tasks</p>) : 
+            (<div>
+                <TaskFilter users={users} userIndex={currentUser} categoryFilter={categoryFilter} setCategoryFilter={setCategoryFilter} />
+                <ul className="TaskContainer">
+                    {taskComponents} 
+                </ul>
+             </div>)}
         </div>
     )
 }
