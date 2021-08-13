@@ -8,6 +8,7 @@ function Task({task, deleteTask}) {
         <div>
             <li>
                 <button onClick={handleClick}>X</button>
+                <button>!</button>
                 {task.description}
             </li>
         </div>

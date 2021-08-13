@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import NewCategoryForm from './NewCategoryForm'
 import NewTaskForm from './NewTaskForm'
+import NewUserForm from './NewUserForm'
 import Task from './Task'
 import TaskFilter from './TaskFilter'
 
@@ -79,6 +80,21 @@ function TaskContainer({setUsers, users, currentUser}) {
             })
     }
 
+    function addUser(name) {
+        const configObj = {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                name: name
+            })
+        }
+        fetch(`${baseURL}/users`, configObj)
+            .then(resp => resp.json())
+            .then(newUser => {
+                setUsers([...users, newUser])
+            })
+    }
+
     const userTasks = allTasks.filter(task => task.user_id === parseInt(currentUser))
     const filteredTasks = userTasks.filter(task => categoryFilter ===  "All" || task.category_id === parseInt(categoryFilter))
     const taskComponents = filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} />)
@@ -88,7 +104,10 @@ function TaskContainer({setUsers, users, currentUser}) {
             <NewTaskForm options={options} addTask={addTask} />
             <NewCategoryForm options={options} addCategory={addCategory} deleteCategory={deleteCategory} />
             {currentUser === "none" ? 
-            (<p>Please select your username to view tasks</p>) : 
+            (<div>
+                <p>Please select your username to view tasks</p>
+                <NewUserForm addUser={addUser} />
+             </div>) : 
             (<div>
                 <TaskFilter users={users} userIndex={currentUser} categoryFilter={categoryFilter} setCategoryFilter={setCategoryFilter} />
                 <ul className="TaskContainer">
