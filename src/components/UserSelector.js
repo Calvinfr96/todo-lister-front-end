@@ -6,6 +6,7 @@ function UserSelector({users, currentUser, setCurrentUser}) {
     function handleSelection(event) {
         setCurrentUser(event.target.value)
     }
+
     return (
         <div>
             <span>Select User to View Tasks: </span>

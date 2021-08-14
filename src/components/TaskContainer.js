@@ -5,30 +5,29 @@ import NewUserForm from './NewUserForm'
 import Task from './Task'
 import TaskFilter from './TaskFilter'
 
-function TaskContainer({setUsers, users, currentUser}) {
+function TaskContainer({baseURL, setUsers, users, currentUser}) {
     const [allTasks, setAllTasks] = useState([])
     const [categories, setCategories] = useState([])
     const [categoryFilter, setCategoryFilter] = useState("All")
-    const baseURL = "http://localhost:9393"
     const options = categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)
 
     useEffect(() => {
         fetch(`${baseURL}/tasks`)
             .then(resp => resp.json())
             .then(data => setAllTasks(data))
-    },[])
+    },[baseURL])
 
     useEffect(() => {
         fetch(`${baseURL}/categories`)
             .then(resp => resp.json())
             .then(data => setCategories(data))
-    }, [])
+    }, [baseURL])
 
     useEffect(() => {
         fetch(`${baseURL}/users`)
             .then(resp => resp.json())
             .then(data => setUsers(data))
-    }, [setUsers, allTasks])
+    }, [baseURL, setUsers, allTasks])
 
     function addTask(formData) {
         const configObj = {
@@ -37,7 +36,8 @@ function TaskContainer({setUsers, users, currentUser}) {
             body: JSON.stringify({
                 ...formData,
                 category_id: parseInt(formData.category_id),
-                user_id: parseInt(currentUser)
+                user_id: parseInt(currentUser),
+                important: false
             })
         }
         fetch(`${baseURL}/tasks`, configObj)
@@ -52,6 +52,28 @@ function TaskContainer({setUsers, users, currentUser}) {
             .then(resp => resp.json())
             .then(data => {
                 const updatedTasks = allTasks.filter(task => task.id !== id)
+                setAllTasks(updatedTasks)
+            })
+    }
+
+    function toggleImportant(task) {
+        const configObj = {
+            method: "PATCH",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                important: !task.important
+            })
+        }
+        fetch(`${baseURL}/tasks/${task.id}`, configObj)
+            .then(resp => resp.json())
+            .then(newTask => {
+                const updatedTasks = allTasks.map(task => {
+                    if (task.id === newTask.id) {
+                        return newTask
+                    } else {
+                        return task
+                    }
+                })
                 setAllTasks(updatedTasks)
             })
     }
@@ -97,7 +119,7 @@ function TaskContainer({setUsers, users, currentUser}) {
 
     const userTasks = allTasks.filter(task => task.user_id === parseInt(currentUser))
     const filteredTasks = userTasks.filter(task => categoryFilter ===  "All" || task.category_id === parseInt(categoryFilter))
-    const taskComponents = filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} />)
+    const taskComponents = filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} />)
 
     return (
         <div>
@@ -105,7 +127,7 @@ function TaskContainer({setUsers, users, currentUser}) {
             <NewCategoryForm options={options} addCategory={addCategory} deleteCategory={deleteCategory} />
             {currentUser === "none" ? 
             (<div>
-                <p>Please select your username to view tasks</p>
+                <p>Please select your username from above to view tasks</p>
                 <NewUserForm addUser={addUser} />
              </div>) : 
             (<div>

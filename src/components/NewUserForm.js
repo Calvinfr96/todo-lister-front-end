@@ -20,6 +20,8 @@ function NewUserForm({addUser}) {
                 <input type="text" value={text} onChange={editText} placeholder="Name..."></input>
                 <button type="submit">Add</button>
             </form>
+            <form>
+            </form>
         </div>
     )
 }

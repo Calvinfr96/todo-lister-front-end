@@ -20,3 +20,7 @@ h1, p, .NewUser {
 .CategoryForm form {
   display: inline;
 }
+
+.important {
+  color: red
+}

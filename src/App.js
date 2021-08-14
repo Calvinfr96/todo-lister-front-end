@@ -7,12 +7,13 @@ import UserSelector from './components/UserSelector';
 function App() {
   const [users, setUsers] = useState([])
   const[currentUser, setCurrentUser] = useState("none")
+  const baseURL = "http://localhost:9393"
 
   return (
     <div className="App">
       <Header />
       <UserSelector users={users} currentUser={currentUser} setCurrentUser={setCurrentUser} />
-      <TaskContainer setUsers={setUsers} users={users} currentUser={currentUser} />
+      <TaskContainer baseURL={baseURL} setUsers={setUsers} users={users} currentUser={currentUser} />
     </div>
   );
 }
