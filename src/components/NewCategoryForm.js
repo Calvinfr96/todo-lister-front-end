@@ -29,7 +29,7 @@ function NewCategoryForm({options, addCategory, deleteCategory}) {
         <div className="CategoryForm">
             <form onSubmit={handleAddCategory}>
                 <span>Add / Delete Category: </span>
-                <input type="text" value={text} onChange={editText}></input>
+                <input type="text" value={text} onChange={editText} placeholder="Name..."></input>
                 <button type="submit">Add</button>
             </form>
             <form onSubmit={handleDeleteCategory}>

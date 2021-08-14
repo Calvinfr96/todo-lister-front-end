@@ -21,6 +21,7 @@ p, .NewUser {
 
 .TaskContainer {
   list-style-type: none;
+  padding-left: 10px;
   text-align: left;
   border: 1px solid black;
   background-color: white;
@@ -54,18 +55,18 @@ p, .NewUser {
 
 .normal {
   background-color: rgb(200, 200, 200);
-  margin: 5px 0px 5px 0px;
+  margin: 10px 0px 10px 0px;
 }
 
 .important {
   background-color: rgb(255, 153, 153);
-  margin: 5px 0px 5px 0px;
+  margin: 10px 0px 10px 0px;
   color: rgb(153, 0 , 0);
 }
 
 .completed {
   background-color: rgb(153, 255, 153);
-  margin: 5px 0px 5px 0px;
+  margin: 10px 0px 10px 0px;
   color: rgb(0, 153 , 0);
   text-decoration: line-through;
 }
