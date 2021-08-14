@@ -12,7 +12,8 @@ function TaskFilter({users, userIndex, categoryFilter, setCategoryFilter}) {
         <div>
            <span>Filter Tasks: </span>
            <select value={categoryFilter} onChange={handleSelection}>
-                <option value="All" disabled>Select Filter</option>
+                <option value="Default" disabled>Select Filter</option>
+                <option value="All">All</option>
                 {options}
            </select>
         </div>

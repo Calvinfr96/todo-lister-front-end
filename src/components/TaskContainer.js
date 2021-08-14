@@ -8,7 +8,7 @@ import TaskFilter from './TaskFilter'
 function TaskContainer({baseURL, setUsers, users, currentUser}) {
     const [allTasks, setAllTasks] = useState([])
     const [categories, setCategories] = useState([])
-    const [categoryFilter, setCategoryFilter] = useState("All")
+    const [categoryFilter, setCategoryFilter] = useState("Default")
     const [showImportant, setShowImportant] = useState(false)
     const options = categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)
 
@@ -124,7 +124,8 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
 
     const userTasks = allTasks.filter(task => task.user_id === parseInt(currentUser))
     const importantTasks = userTasks.filter(task => task.important)
-    const filteredTasks = userTasks.filter(task => categoryFilter ===  "All" || task.category_id === parseInt(categoryFilter))
+    const filteredTasks = userTasks.filter(task => categoryFilter ===  "Default" || categoryFilter === "All" ||
+        task.category_id === parseInt(categoryFilter))
     const taskComponents = showImportant ? 
         (importantTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} />)) :
         (filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} />))
