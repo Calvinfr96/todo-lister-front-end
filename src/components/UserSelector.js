@@ -1,10 +1,12 @@
 import React from 'react'
 
-function UserSelector({users, currentUser, setCurrentUser}) {
-    const options = users.map(user => <option key={user.id} value={user.id} >{user.name}</option>)
+function UserSelector({users, currentUser, setCurrentUser, setHeaderText}) {
+    const options = users.map(user => <option key={user.id} value={`${user.id}-${user.name}`} >{user.name}</option>)
 
     function handleSelection(event) {
-        setCurrentUser(event.target.value)
+        const [userID, userName] = event.target.value.split('-')
+        setCurrentUser(userID)
+        setHeaderText(`${userName}'s To Do's`)
     }
 
     return (

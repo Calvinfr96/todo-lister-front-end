@@ -7,12 +7,13 @@ import UserSelector from './components/UserSelector';
 function App() {
   const [users, setUsers] = useState([])
   const[currentUser, setCurrentUser] = useState("none")
+  const [headerText, setHeaderText] = useState("To Do Lister")
   const baseURL = "http://localhost:9393"
 
   return (
     <div className="App">
-      <Header />
-      <UserSelector users={users} currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <Header header={headerText} />
+      <UserSelector users={users} currentUser={currentUser} setCurrentUser={setCurrentUser} setHeaderText={setHeaderText} />
       <TaskContainer baseURL={baseURL} setUsers={setUsers} users={users} currentUser={currentUser} />
     </div>
   );
