@@ -2,12 +2,20 @@
   text-align: left;
 }
 
+body {
+  background-color: rgb(102, 178, 255);
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
 
-h1, p, .NewUser {
+h1 {
+  text-align: center;
+}
+
+p, .NewUser {
   text-align: center;
 }
 
@@ -15,17 +23,49 @@ h1, p, .NewUser {
   list-style-type: none;
   text-align: left;
   border: 1px solid black;
+  background-color: white;
 }
 
 .CategoryForm form {
   display: inline;
 }
 
+.remove {
+  background-color: red;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.finish {
+  background-color: green;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.emphasize {
+  background-color: yellow;
+  font-size: large;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.normal {
+  background-color: rgb(200, 200, 200);
+  margin: 5px 0px 5px 0px;
+}
+
 .important {
-  color: red;
+  background-color: rgb(255, 153, 153);
+  margin: 5px 0px 5px 0px;
+  color: rgb(153, 0 , 0);
 }
 
 .completed {
-  color: green;
+  background-color: rgb(153, 255, 153);
+  margin: 5px 0px 5px 0px;
+  color: rgb(0, 153 , 0);
   text-decoration: line-through;
 }

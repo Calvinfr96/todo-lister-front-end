@@ -17,22 +17,22 @@ function Task({task, deleteTask, toggleImportant, toggleCompleted}) {
         toggleCompleted(task)
     }
 
-    let className = null
+    let className = "normal"
 
     if (task.completed) {
         className = "completed"
     } else if (task.important) {
         className = "important"
     } else {
-        className = null
+        className = "normal"
     }
     
     return (
         <div className={className}>
             <li>
-                <input type="button" value="&#x2715;" onClick={handleDelete}></input>
-                <input type="button" value="&#x2713;" onClick={handleToggleCompleted}></input>
-                <input type="button" value="&#33;" onClick={handleToggleImportant}></input>
+                <input className="remove" type="button" value="&#x2715;" onClick={handleDelete}></input>
+                <input className="finish" type="button" value="&#x2713;" onClick={handleToggleCompleted}></input>
+                <input className="emphasize" type="button" value="&#33;" onClick={handleToggleImportant}></input>
                 {task.description}
             </li>
         </div>
