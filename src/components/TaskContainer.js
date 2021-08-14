@@ -38,7 +38,8 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
                 ...formData,
                 category_id: parseInt(formData.category_id),
                 user_id: parseInt(currentUser),
-                important: false
+                important: false,
+                completed: false
             })
         }
         fetch(`${baseURL}/tasks`, configObj)
@@ -63,6 +64,28 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
             headers: {"Content-Type":"application/json"},
             body: JSON.stringify({
                 important: !task.important
+            })
+        }
+        fetch(`${baseURL}/tasks/${task.id}`, configObj)
+            .then(resp => resp.json())
+            .then(newTask => {
+                const updatedTasks = allTasks.map(task => {
+                    if (task.id === newTask.id) {
+                        return newTask
+                    } else {
+                        return task
+                    }
+                })
+                setAllTasks(updatedTasks)
+            })
+    }
+
+    function toggleCompleted(task) {
+        const configObj = {
+            method: "PATCH",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                completed: !task.completed
             })
         }
         fetch(`${baseURL}/tasks/${task.id}`, configObj)
@@ -127,8 +150,8 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
     const filteredTasks = userTasks.filter(task => categoryFilter ===  "Default" || categoryFilter === "All" ||
         task.category_id === parseInt(categoryFilter))
     const taskComponents = showImportant ? 
-        (importantTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} />)) :
-        (filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} />))
+        (importantTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} toggleCompleted={toggleCompleted} />)) :
+        (filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} toggleCompleted={toggleCompleted} />))
     const importantButton = importantTasks.length === 0 ? 
         null: <button onClick={toggleFilter}>{showImportant ? "Show all tasks" : "Show important tasks"}</button>
 

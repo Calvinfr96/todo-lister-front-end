@@ -22,5 +22,10 @@ h1, p, .NewUser {
 }
 
 .important {
-  color: red
+  color: red;
+}
+
+.completed {
+  color: green;
+  text-decoration: line-through;
 }

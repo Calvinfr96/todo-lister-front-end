@@ -1,18 +1,38 @@
 import React from 'react'
 
-function Task({task, deleteTask, toggleImportant}) {
-    function handleClick() {
-        deleteTask(task.id)
+function Task({task, deleteTask, toggleImportant, toggleCompleted}) {
+    function handleDelete() {
+        if (task.completed) {
+            deleteTask(task.id)
+        } else {
+            alert('Task must be marked as completed before being deleted')
+        }
     }
 
-    function handleToggle() {
+    function handleToggleImportant() {
         toggleImportant(task)
     }
+
+    function handleToggleCompleted() {
+        toggleCompleted(task)
+    }
+
+    let className = null
+
+    if (task.completed) {
+        className = "completed"
+    } else if (task.important) {
+        className = "important"
+    } else {
+        className = null
+    }
+    
     return (
-        <div className={task.important ? "important" : null}>
+        <div className={className}>
             <li>
-                <button onClick={handleClick}>X</button>
-                <button onClick={handleToggle}>!</button>
+                <input type="button" value="&#x2715;" onClick={handleDelete}></input>
+                <input type="button" value="&#x2713;" onClick={handleToggleCompleted}></input>
+                <input type="button" value="&#33;" onClick={handleToggleImportant}></input>
                 {task.description}
             </li>
         </div>
