@@ -9,6 +9,7 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
     const [allTasks, setAllTasks] = useState([])
     const [categories, setCategories] = useState([])
     const [categoryFilter, setCategoryFilter] = useState("All")
+    const [showImportant, setShowImportant] = useState(false)
     const options = categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)
 
     useEffect(() => {
@@ -78,6 +79,10 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
             })
     }
 
+    function toggleFilter() {
+        setShowImportant(!showImportant)
+    }
+
     function addCategory(name) {
         const configObj = {
             method: "POST",
@@ -118,8 +123,13 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
     }
 
     const userTasks = allTasks.filter(task => task.user_id === parseInt(currentUser))
+    const importantTasks = userTasks.filter(task => task.important)
     const filteredTasks = userTasks.filter(task => categoryFilter ===  "All" || task.category_id === parseInt(categoryFilter))
-    const taskComponents = filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} />)
+    const taskComponents = showImportant ? 
+        (importantTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} />)) :
+        (filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} />))
+    const importantButton = importantTasks.length === 0 ? 
+        null: <button onClick={toggleFilter}>{showImportant ? "Show all tasks" : "Show important tasks"}</button>
 
     return (
         <div>
@@ -132,6 +142,7 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
              </div>) : 
             (<div>
                 <TaskFilter users={users} userIndex={currentUser} categoryFilter={categoryFilter} setCategoryFilter={setCategoryFilter} />
+                {importantButton}
                 <ul className="TaskContainer">
                     {taskComponents} 
                 </ul>
