@@ -149,9 +149,11 @@ function TaskContainer({baseURL, setUsers, users, currentUser}) {
     const importantTasks = userTasks.filter(task => task.important)
     const filteredTasks = userTasks.filter(task => categoryFilter ===  "Default" || categoryFilter === "All" ||
         task.category_id === parseInt(categoryFilter))
+
     const taskComponents = showImportant ? 
         (importantTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} toggleCompleted={toggleCompleted} />)) :
         (filteredTasks.map(task => <Task key={task.id} task={task} deleteTask={deleteTask} toggleImportant={toggleImportant} toggleCompleted={toggleCompleted} />))
+        
     const importantButton = importantTasks.length === 0 ? 
         null: <button onClick={toggleFilter}>{showImportant ? "Show all tasks" : "Show important tasks"}</button>
 
